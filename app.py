@@ -7,22 +7,25 @@ items = []
 
 class TodoItems(RequestHandler):
     def get(self):
-        write_message = []
-        for item in items:
-            write_message.append(json.loads(item))
-        self.write({'items': write_message})
+        self.write({'items': items})
 
 
 class TodoItem(RequestHandler):
-    def post(self):
-        items.append(self.request.body)
+    def post(self, _):
+        items.append(json.loads(self.request.body))
         self.write({'message': 'new item added'})
+
+    def delete(self, id):
+        global items
+        new_items = [item for item in items if item['id'] is not int(id)]
+        items = new_items
+        self.write({'message': 'Item with id {0} was deleted'.format(id)})
 
 
 def make_app():
     urls = [
         ("/", TodoItems),
-        ("/api/item/", TodoItem)
+        (r"/api/item/([^/]+)?", TodoItem)
     ]
     return Application(urls, debug=True)
 
