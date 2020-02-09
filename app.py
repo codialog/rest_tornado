@@ -24,8 +24,6 @@ class TodoItems(SessionMixin, RequestHandler):
         try:
             data = self.get_body_argument("array")
             raw_array = to_int_arr(data)
-            # if len(data) > 3:
-            #     raise
             with self.make_session() as session:
                 item = TableItem(raw_array=raw_array,
                                  sorted_array=sorted(raw_array),
@@ -65,7 +63,8 @@ def make_app():
         (r"/api/item/([^/]+)?", TodoItem),
         (r"/api/items", TodoItems)
     ]
-    return Application(urls, db=SQLAlchemy('postgresql://root:root@localhost:5432/postgres'), debug=True)
+    db_url = 'postgresql://postgres:root@localhost:5400/postgres'
+    return Application(urls, db=SQLAlchemy(db_url), debug=True)
 
 
 if __name__ == '__main__':

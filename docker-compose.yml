@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  postgres:
+    image: postgres
+    ports:
+      - 5400:5432
+    environment:
+      POSTGRES_PASSWORD: root
+
+  tensorflow:
+    image: tensorflow/tensorflow
